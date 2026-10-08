@@ -1,0 +1,212 @@
+﻿@model List<Member>
+
+@{
+    ViewData["Title"] = "Members";
+}
+
+<style>
+    .members-page {
+        background: #e8e8e8;
+        min-height: 100vh;
+        padding: 40px 20px;
+        color: #222;
+    }
+
+    .members-container {
+        max-width: 1000px;
+        margin: auto;
+    }
+
+    .members-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: white;
+        padding: 25px;
+        border-left: 6px solid #111;
+        margin-bottom: 25px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .members-top h1 {
+        margin: 0;
+        font-size: 2rem;
+        color: #111;
+    }
+
+    .members-top p {
+        margin: 5px 0 0;
+        color: #777;
+    }
+
+    .add-member {
+        background: #111;
+        color: white;
+        padding: 11px 18px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .add-member:hover {
+        background: #555;
+        color: white;
+    }
+
+    .member-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .member-row {
+        background: white;
+        padding: 20px;
+        display: grid;
+        grid-template-columns: 60px 1fr 1.2fr 140px 150px;
+        align-items: center;
+        gap: 15px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+    }
+
+    .member-number {
+        font-weight: bold;
+        color: #888;
+    }
+
+    .member-name {
+        font-weight: bold;
+        color: #111;
+    }
+
+    .member-email {
+        color: #666;
+    }
+
+    .member-type {
+        display: inline-block;
+        background: #222;
+        color: white;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        text-align: center;
+    }
+
+    .member-actions {
+        display: flex;
+        gap: 7px;
+    }
+
+    .edit-member {
+        background: #777;
+        color: white;
+        padding: 7px 12px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: 0.85rem;
+    }
+
+    .delete-member {
+        background: white;
+        color: #111;
+        border: 1px solid #111;
+        padding: 7px 12px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: 0.85rem;
+    }
+
+    .edit-member:hover {
+        background: #444;
+        color: white;
+    }
+
+    .delete-member:hover {
+        background: #111;
+        color: white;
+    }
+
+    @@media (max-width: 800px) {
+        .member-row {
+            grid-template-columns: 1fr;
+        }
+
+        .members-top {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .member-actions {
+            margin-top: 5px;
+        }
+    }
+</style>
+
+<div class="members-page">
+
+    <div class="members-container">
+
+        <div class="members-top">
+
+            <div>
+                <h1>Library Members</h1>
+                <p>@Model.Count members registered</p>
+            </div>
+
+            <a asp-action="Create" class="add-member">
+                + Add a Member
+            </a>
+
+        </div>
+
+        <div class="member-list">
+
+            @foreach (var member in Model)
+            {
+                <div class="member-row">
+
+                    <div class="member-number">
+                        #@member.MemberId
+                    </div>
+
+                    <div class="member-name">
+                        @member.FullName
+                    </div>
+
+                    <div class="member-email">
+                        @(member.Email ?? "—")
+                    </div>
+
+                    <div>
+                        <span class="member-type">
+                            @member.MemberType
+                        </span>
+                    </div>
+
+                    <div class="member-actions">
+
+                        <a asp-action="Edit"
+                           asp-route-id="@member.MemberId"
+                           class="edit-member">
+                            Edit
+                        </a>
+
+                        <a asp-action="Delete"
+                           asp-route-id="@member.MemberId"
+                           class="delete-member">
+                            Delete
+                        </a>
+
+                    </div>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>

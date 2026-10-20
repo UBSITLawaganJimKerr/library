@@ -26,7 +26,7 @@ public class NotesController : Controller
             CreatedOn = DateTime.Today
         });
     }
-
+    
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(Note note)

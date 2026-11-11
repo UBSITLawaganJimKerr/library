@@ -26,19 +26,35 @@ public class MembersController : Controller
         return View(new Member());
     }
 
+    // POST /Members/Create : the form was submitted.
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(Member member)
     {
-        if (!ModelState.IsValid)
+        if (/* 1. a rule on the form was broken */ !ModelState.IsValid)
         {
             return View(member);
+            // 2. Show the form again, with what was typed.
         }
 
-        await _members.AddAsync(member);
+        try
+        {
+            await _members.AddAsync(member);
+            // 3. Save the new member.
+        }
+        catch (PostgresException ex) when (/* 4. another member already uses this email */ ex.SqlState == PostgresErrorCodes.UniqueViolation)
+        {
+            ModelState.AddModelError("Email", "Another member already uses this email.");
+            // 5. Put a message under the Email box.
+
+            return View(member);
+            // 6. Show the form again, with what was typed.
+        }
 
         return RedirectToAction(nameof(Index));
+        // 7. The member was saved: go back to the list.
     }
+
 
     public async Task<IActionResult> Edit(long id)
     {
@@ -52,17 +68,32 @@ public class MembersController : Controller
         return View(member);
     }
 
+    // POST /Members/Edit/5 : the changed form was submitted.
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(Member member)
     {
-        if (!ModelState.IsValid)
+        if (/* 1. a rule on the form was broken */ !ModelState.IsValid)
         {
+            // 2. Show the form again, with what was typed.
             return View(member);
         }
 
-        await _members.UpdateAsync(member);
+        try
+        {
+            // 3. Save the changes.
+            await _members.UpdateAsync(member);
+        }
+        catch (PostgresException ex) when (/* 4. another member already uses this email */ ex.SqlState == PostgresErrorCodes.UniqueViolation)
+        {
+            // 5. Put a message under the Email box.
+            ModelState.AddModelError("Email", "Another member already uses this email.");
 
+            // 6. Show the form again, with what was typed.
+            return View(member);
+        }
+
+        // 7. The changes were saved: go back to the list.
         return RedirectToAction(nameof(Index));
     }
 

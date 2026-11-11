@@ -4,12 +4,292 @@
     ViewData["Title"] = "Members";
 }
 
+<style>
+    .members-page {
+        --members-ink: #1d3440;
+        --members-muted: #687b83;
+        --members-primary: #176b68;
+        --members-border: #dce7e4;
+
+        color: var(--members-ink);
+    }
+
+    .members-container {
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    .members-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .members-top h1 {
+        margin: 0 0 0.35rem;
+        font-size: clamp(1.8rem, 3vw, 2.4rem);
+        font-weight: 750;
+        letter-spacing: -0.04em;
+    }
+
+    .members-top p {
+        margin: 0;
+        color: var(--members-muted);
+    }
+
+    .add-member {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+        padding: 0.7rem 1rem;
+        border-radius: 0.7rem;
+        background: var(--members-primary);
+        color: #fff;
+        font-weight: 700;
+        text-decoration: none;
+        transition: background-color 150ms ease, transform 150ms ease;
+    }
+
+    .add-member::before {
+        content: "＋";
+        font-size: 1.1rem;
+        line-height: 1;
+    }
+
+    .add-member:hover,
+    .add-member:focus {
+        transform: translateY(-1px);
+        background: #105451;
+        color: #fff;
+    }
+
+    .member-list {
+        display: grid;
+        gap: 0.85rem;
+    }
+
+    .member-row {
+        display: grid;
+        grid-template-columns: 58px minmax(140px, 1.1fr) minmax(170px, 1.5fr) auto 105px auto;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem 1.15rem;
+        border: 1px solid var(--members-border);
+        border-radius: 0.9rem;
+        background: #fff;
+        box-shadow: 0 5px 18px rgba(29, 52, 64, 0.05);
+        transition: box-shadow 160ms ease, transform 160ms ease;
+    }
+
+    .member-row:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 9px 24px rgba(29, 52, 64, 0.1);
+    }
+
+    .member-number {
+        display: grid;
+        width: 2.6rem;
+        height: 2.6rem;
+        place-items: center;
+        border-radius: 0.8rem;
+        background: #edf4f2;
+        color: var(--members-primary);
+        font-size: 0.8rem;
+        font-weight: 750;
+    }
+
+    .member-name {
+        font-weight: 700;
+        overflow-wrap: anywhere;
+    }
+
+    .member-email {
+        min-width: 0;
+        color: var(--members-muted);
+        overflow-wrap: anywhere;
+    }
+
+    .member-type {
+        display: inline-block;
+        padding: 0.35rem 0.65rem;
+        border-radius: 999px;
+        background: #f0eaff;
+        color: #6544a1;
+        font-size: 0.78rem;
+        font-weight: 700;
+    }
+
+    .books-out {
+        display: flex;
+        align-items: center;
+        gap: 0.55rem;
+        white-space: nowrap;
+    }
+
+    .books-out span {
+        color: var(--members-muted);
+        font-size: 0.82rem;
+    }
+
+    .books-out strong {
+        display: grid;
+        min-width: 1.9rem;
+        height: 1.9rem;
+        padding: 0 0.35rem;
+        place-items: center;
+        border-radius: 999px;
+        background: #e6f1ff;
+        color: #24589a;
+        font-size: 0.85rem;
+    }
+
+    .member-actions {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 0.4rem;
+    }
+
+    .member-actions a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.3rem;
+        min-height: 2.2rem;
+        padding: 0.4rem 0.65rem;
+        border-radius: 0.55rem;
+        font-size: 0.82rem;
+        font-weight: 650;
+        text-decoration: none;
+        white-space: nowrap;
+        transition: background-color 150ms ease, color 150ms ease;
+    }
+
+    .edit-member {
+        border: 1px solid #d9e7e4;
+        background: #f3f8f7;
+        color: #176b68;
+    }
+
+    .edit-member::before {
+        content: "✎";
+    }
+
+    .edit-member:hover {
+        background: #e4f1ee;
+        color: #105451;
+    }
+
+    .member-actions .btn-outline-primary {
+        border-color: #b9d8d3;
+        color: #176b68;
+    }
+
+    .member-actions .btn-outline-primary::before {
+        content: "◉";
+    }
+
+    .member-actions .btn-outline-primary:hover {
+        border-color: #176b68;
+        background: #176b68;
+        color: #fff;
+    }
+
+    .delete-member {
+        border: 1px solid #f0c4c8;
+        background: #fff5f5;
+        color: #a8323e;
+    }
+
+    .delete-member::before {
+        content: "⌫";
+    }
+
+    .delete-member:hover {
+        background: #a8323e;
+        color: #fff;
+    }
+
+    @@media (max-width: 900px) {
+        .member-row {
+            grid-template-columns: 48px minmax(130px, 1fr) minmax(150px, 1.2fr) auto;
+        }
+
+        .member-actions {
+            grid-column: 2 / -1;
+            justify-content: flex-start;
+        }
+    }
+
+    @@media (max-width: 575.98px) {
+        .members-top {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .add-member {
+            width: 100%;
+        }
+
+        .member-row {
+            grid-template-columns: 1fr auto;
+            gap: 0.75rem;
+            padding: 1rem;
+        }
+
+        .member-number {
+            grid-column: 1;
+            grid-row: 1;
+        }
+
+        .member-name {
+            grid-column: 1 / -1;
+            grid-row: 2;
+            font-size: 1.05rem;
+        }
+
+        .member-email {
+            grid-column: 1 / -1;
+            grid-row: 3;
+            font-size: 0.9rem;
+        }
+
+        .member-row > div:nth-child(4) {
+            grid-column: 1;
+            grid-row: 4;
+        }
+
+        .books-out {
+            grid-column: 2;
+            grid-row: 1;
+            justify-self: end;
+        }
+
+        .member-actions {
+            grid-column: 1 / -1;
+            grid-row: 5;
+            justify-content: flex-start;
+            padding-top: 0.7rem;
+            border-top: 1px solid var(--members-border);
+        }
+    }
+
+    @@media (prefers-reduced-motion: reduce) {
+        .member-row,
+        .member-actions a,
+        .add-member {
+            transition: none;
+        }
+    }
+</style>
+
 <div class="members-page">
-
     <div class="members-container">
-
         <div class="members-top">
-
             <div>
                 <h1>Library Members</h1>
                 <p>@Model.Count members registered</p>
@@ -18,15 +298,12 @@
             <a asp-action="Create" class="add-member">
                 + Add a Member
             </a>
-
         </div>
 
         <div class="member-list">
-
             @foreach (var member in Model)
             {
                 <div class="member-row">
-
                     <div class="member-number">
                         #@member.MemberId
                     </div>
@@ -51,7 +328,6 @@
                     </div>
 
                     <div class="member-actions">
-
                         <a asp-action="Edit"
                            asp-route-id="@member.MemberId"
                            class="edit-member">
@@ -69,14 +345,9 @@
                            class="delete-member">
                             Delete
                         </a>
-
                     </div>
-
                 </div>
             }
-
         </div>
-
     </div>
-
 </div>

@@ -23,6 +23,13 @@ public class MembersController : Controller
         return View(members);
     }
 
+    // GET /Members/Create : show the blank form.
+    [HttpGet]
+    public IActionResult Create()
+    {
+        return View();
+    }
+
     // POST /Members/Create : the form was submitted.
     [HttpPost]
     [ValidateAntiForgeryToken]

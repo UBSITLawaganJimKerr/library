@@ -17,6 +17,11 @@ public class MembersController : Controller
         _loans = loans;
     }
 
+    public async Task<IActionResult> Index()
+    {
+        var members = await _members.GetAllAsync();
+        return View(members);
+    }
 
     // POST /Members/Create : the form was submitted.
     [HttpPost]

@@ -18,6 +18,8 @@ builder.Services.AddScoped<BookRepository>();
 
 builder.Services.AddScoped<MemberRepository>();
 
+builder.Services.AddScoped<LoanRepository>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
